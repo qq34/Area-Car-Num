@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mapper:根标签，namespace：命名空间，如果使用Mybatis的DAO接口动态代理，则namespace必须为DAO接口的全路径 -->
+<mapper namespace="com.eagle.cloud.route.dao.SysScreenDao">
+
+<!--	<select id="getScreenList" resultType="com.eagle.cloud.route.model.SysScreen">-->
+<!--		&lt;!&ndash; statement，内容：sql语句。id：唯一标识，使用动态代理之后要求和方法名保持一致-->
+<!--           resultType：sql语句查询结果集的封装类型,tb_user即为数据库中的表-->
+<!--         &ndash;&gt;-->
+<!--		SELECT id, modeid, name, sort, pagelevel FROM road_ipad_screen-->
+<!--		ORDER BY sort-->
+<!--	</select>-->
+<!--	<delete id="deleteUserCustomScreen" parameterType="Long">-->
+<!--		delete road_ipad_screen a where a.id = #{userId}-->
+<!--	</delete>-->
+<!--	-->
+<!--	<insert id="addRecordInfo" parameterType="com.eagle.cloud.route.vo.StepsRecord">-->
+<!--		INSERT INTO tbl_steps_record(pathId,sectionId,status,polyline,sort,createTime) VALUES (#{pathId},#{sectionId},#{status},#{polyline},#{sort},#{createTime})-->
+<!--	</insert>-->
+<!--	-->
+<!--	<select id="getTbl_sectionInfo" resultType="com.eagle.cloud.route.vo.Section">-->
+<!--		select * from  tbl_section-->
+<!--	</select>-->
+<!--	-->
+<!--	&lt;!&ndash; 更新分段路径记录表 通过分段编号和区间路径编号 &ndash;&gt;-->
+<!--	<update id="updateSectionBysectionId" parameterType="com.eagle.cloud.route.vo.Section">-->
+<!--		update  tbl_section set duration=#{duration},distance=#{distance},speed=#{speed},sort=#{sort},updateTime=#{updateTime} where sectionId=#{sectionId} and pathId=#{pathId}-->
+<!--	</update>-->
+<!--	-->
+<!--	&lt;!&ndash; 计算时间和距离 &ndash;&gt;-->
+<!--	<select id="getScrtionCountBypathId" resultType="com.eagle.cloud.route.dto.requestDto">-->
+<!--		select pathId,SUM(duration) as durationSum,SUM(distance) as distanceSum from  tbl_section GROUP BY pathId-->
+<!--	</select>-->
+<!--	-->
+<!--	&lt;!&ndash; 更新tbl_path时间和记录 &ndash;&gt;-->
+<!--	<update id="updatePathDurationAndDistance" parameterType="com.eagle.cloud.route.dto.requestDto">-->
+<!--		UPDATE tbl_path set duration=#{durationSum},distance=#{distanceSum},updateTime=#{updateTime} where pathId=#{pathId}-->
+<!--	</update>-->
+<!--	&lt;!&ndash;		查询最近一次的sort 值 &ndash;&gt;-->
+<!--	<select id="getSortMax" resultType="BigDecimal">-->
+<!--		select MAX(sort) from tbl_steps_record-->
+<!--	</select>-->
+<!--	<select id="getRoadAll" resultType="com.eagle.cloud.route.vo.StepsRecord">-->
+<!--			SELECT * FROM tbl_steps_record WHERE sort=#{bigDecimal}-->
+<!--	</select>-->
+<!--	<select id="getSortMaxCount" resultType="int">-->
+<!--			SELECT count(*) FROM tbl_steps_record WHERE sort=#{bigDecimal}-->
+<!--	</select>-->
+<!--&lt;!&ndash;查询第二大的sort值&ndash;&gt;-->
+<!--	<select id="getSortSecondMax" resultType="BigDecimal">-->
+<!--			select MAX(sort) from tbl_steps_record WHERE sort &lt; (select max(sort) from tbl_steps_record)-->
+<!--	</select>-->
+
+<!--	实时车辆算法-->
+	<select id="getLSFromDataByTime" resultType="com.eagle.cloud.route.model.LSmodel">
+		SELECT * FROM areals.data where time >= #{param2} and time &lt; #{param1}
+	</select>
+	<select id="getAllGantryNumber" resultType="com.eagle.cloud.route.controller.resultModel">
+			SELECT * FROM gantry_car_number
+	</select>
+	<update id="updateGantryCarNumber" >
+		UPDATE gantry_car_number set carnumber=#{param2} where gantryID=#{param1}
+	</update>
+	<select id="getCarNumberByGantryName" parameterType="String" resultType="int">
+			SELECT carnumber FROM gantry_car_number where gantryID=#{gantryID}
+	</select>
+	<select id="getTimeWithPlateAndGantryID"  resultType="String">
+			SELECT max(time) FROM data WHERE plate =#{param1} and gantryID =#{param2}
+	</select>
+
+
+	<select id="getCountFromDataByTime" resultType="int">
+		SELECT count(*) FROM areals.data where time >= #{param2} and time &lt; #{param1} and gantryID = #{param3}
+	</select>
+
+</mapper>
